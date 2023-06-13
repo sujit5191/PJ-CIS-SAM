@@ -1,0 +1,77 @@
+{
+  "name": "CIS_SAM",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^5.9.3",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.8.16",
+    "@sap/textbundle": "^4.1.0",
+    "@sap/xssec": "^3.2.13",
+    "cds-pg": "^0.1.36",
+    "passport": "^0.5.2",
+    "pg": "^8.7.3",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "cds-dbm": "^0.0.36",
+    "mbt": "~1.2.23",
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "build": {
+      "tasks": [
+        {
+          "for": "node-cf",
+          "src": "srv",
+          "options": {
+            "model": [
+                "db",
+                "srv"
+            ]
+        }
+        },
+        {
+          "use": "cds-dbm/dist/build/postgres-cf",
+          "for": "postgres-cf",
+          "src": "db",
+          "options": {
+            "deployCmd": "npx cds-dbm deploy --load-via delta --auto-undeploy"
+          }
+        }
+      ]
+    },
+    "requires": {
+      "db": {
+        "kind": "database"},
+      "database": {
+        "dialect": "plain",
+        "impl": "cds-pg",
+        "model": [
+          "srv"
+        ]
+      },
+      "auth": {
+        "kind": "xsuaa"
+      }
+    },
+    "migrations": {
+      "db": {
+        "schema": {
+          "default": "public",
+          "clone": "_cdsdbm_clone",
+          "reference": "_cdsdbm_ref"
+        },
+        "deploy": {
+          "tmpFile": "tmp/_autodeploy.json",
+          "undeployFile": "db/undeploy.json"
+        }
+      }
+    }
+  }
+}
