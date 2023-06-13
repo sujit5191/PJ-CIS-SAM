@@ -22,4 +22,57 @@ modules:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
           srv-url: ${default-url}
-    requires: []
+    requires:
+# Resources extracted from CAP configuration
+    - name: cis-sam-uaa
+    - name: cis-destination
+    - name: cis-connectivity
+    - name: cis-sam-database
+# --------------------- DEPLOYER MODULE ----------------------  
+  - name: SAM-db-deployer
+# ------------------------------------------------------------ 
+    type: custom
+    path: gen/db
+    parameters:
+       buildpacks: [https://github.com/cloudfoundry/apt-buildpack#v0.3.0, nodejs_buildpack]
+       no-route: true
+       no-start: true
+       disk-quota: 2GB
+       memory: 512MB
+       tasks:
+       - name: deploy_to_postgresql
+         command: chmod 755 deploy.sh && ./deploy.sh
+         disk-quota: 2GB
+         memory: 512MB      
+    build-parameters:
+       ignore: ["node_modules/"]
+    requires:
+      - name: cis-sam-database
+resources:
+# ------------------------------------------------------------
+ - name: cis-sam-database
+# ------------------------------------------------------------
+   type: org.cloudfoundry.existing-service
+# ------------------------------------------------------------
+ - name: cis-destination
+# ------------------------------------------------------------
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service: destination
+     service-plan: lite
+# ------------------------------------------------------------
+ - name: cis-sam-uaa
+# ------------------------------------------------------------
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service: xsuaa  # or 'hanatrial' on trial landscapes
+     service-plan: application
+     service-name: FGAccurals-xsuaa-srv
+     path: ./xs-security.json
+# ------------------------------------------------------------
+ - name: cis-connectivity
+# ------------------------------------------------------------
+   parameters:
+     service-plan: lite
+     service: connectivity
+   type: org.cloudfoundry.managed-service 
