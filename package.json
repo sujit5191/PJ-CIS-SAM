@@ -1,8 +1,11 @@
 {
-  "name": "CIS_SAM",
+  "name": "cis_sam",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
+  "repository": {
+    "type": "git",
+    "url": "<Add your repository here>"
+  },
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
@@ -10,10 +13,13 @@
     "@sap/cds-odata-v2-adapter-proxy": "^1.8.16",
     "@sap/textbundle": "^4.1.0",
     "@sap/xssec": "^3.2.13",
+    "axios": "^1.4.0",
     "cds-pg": "^0.1.36",
+    "express": "^4",
+    "node-sp-auth": "^3.0.7",
     "passport": "^0.5.2",
     "pg": "^8.7.3",
-    "express": "^4"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "cds-dbm": "^0.0.36",
@@ -31,10 +37,10 @@
           "src": "srv",
           "options": {
             "model": [
-                "db",
-                "srv"
+              "db",
+              "srv"
             ]
-        }
+          }
         },
         {
           "use": "cds-dbm/dist/build/postgres-cf",
@@ -48,7 +54,8 @@
     },
     "requires": {
       "db": {
-        "kind": "database"},
+        "kind": "database"
+      },
       "database": {
         "dialect": "plain",
         "impl": "cds-pg",
@@ -73,5 +80,11 @@
         }
       }
     }
-  }
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "author": ""
 }
