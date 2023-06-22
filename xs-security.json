@@ -1,0 +1,7 @@
+{
+    "xsappname": "CIS_SAM",
+    "tenant-mode": "dedicated",
+    "description": "",
+    "scopes": [],
+    "role-templates": []
+  }

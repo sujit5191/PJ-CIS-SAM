@@ -1,2 +1,2 @@
 ###
-GET http://localhost:4004/catalog/AccrualsData
+GET http://localhost:4004/v2/catalog/AccrualsData

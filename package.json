@@ -11,80 +11,44 @@
   "dependencies": {
     "@sap/cds": "^5.9.3",
     "@sap/cds-odata-v2-adapter-proxy": "^1.8.16",
-    "@sap/textbundle": "^4.1.0",
     "@sap/xssec": "^3.2.13",
-    "axios": "^1.4.0",
-    "cds-pg": "^0.1.36",
-    "express": "^4",
-    "node-sp-auth": "^3.0.7",
-    "passport": "^0.5.2",
-    "pg": "^8.7.3",
-    "xlsx": "^0.18.5"
+    "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/http-client": "2.9.0",
+    "@sap/hana-client": "^2.16.26",
+    "hdb": "^0.19.0",
+    "passport": "^0.6.0",
+    "request": "2.88.2"
   },
   "devDependencies": {
     "cds-dbm": "^0.0.36",
+    "@sap/hdi-deploy": "4.6.1",
     "mbt": "~1.2.23",
     "npm-run-all": "^4.1.5"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds run"
   },
   "cds": {
-    "build": {
-      "tasks": [
-        {
-          "for": "node-cf",
-          "src": "srv",
-          "options": {
-            "model": [
-              "db",
-              "srv"
-            ]
-          }
-        },
-        {
-          "use": "cds-dbm/dist/build/postgres-cf",
-          "for": "postgres-cf",
-          "src": "db",
-          "options": {
-            "deployCmd": "npx cds-dbm deploy --load-via delta --auto-undeploy"
-          }
-        }
-      ]
-    },
     "requires": {
       "db": {
-        "kind": "database"
+        "kind": "hana"
       },
-      "database": {
-        "dialect": "plain",
-        "impl": "cds-pg",
-        "model": [
-          "srv"
-        ]
+      "uaa": {
+        "kind": "xsuaa"
       },
       "auth": {
-        "kind": "xsuaa"
-      }
-    },
-    "migrations": {
-      "db": {
-        "schema": {
-          "default": "public",
-          "clone": "_cdsdbm_clone",
-          "reference": "_cdsdbm_ref"
-        },
-        "deploy": {
-          "tmpFile": "tmp/_autodeploy.json",
-          "undeployFile": "db/undeploy.json"
+        "passport": {
+          "strategy": "JWT"
         }
       }
+    },
+    "env": {
+      "features": {
+        "fetch_csrf": true
+      }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
     }
-  },
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "keywords": [],
-  "author": ""
+  }
 }
